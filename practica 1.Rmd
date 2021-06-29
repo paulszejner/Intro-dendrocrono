@@ -13,18 +13,18 @@ en cada seccion  podras  ejecutar y analizar   los comandos  basicos para  leer,
 La idea de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y  puedas aprender haciendo....
 
 
-A continuacion vamos a instalr y activar el dplR y se conectaran a la base de datos del ITRDB mediante la web
+A continuacion vamos a instalr y activar el dplR y se conectaran a la base de Datos del ITRDB mediante la web
 
 ```{r}
 #install.packages(dplR)
 library(dplR) # libreria para analisis dendrocronologicos
 
-Dat_ringwidth <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+Dat_ringwidth <-  read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
 Dat_Earlywood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042e.rwl")
 Dat_latewood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042l.rwl")
 
 #Tambien se puede bajar  desde los FPTs del NOAA
-#Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+#Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/Data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
 
 str(Dat_ringwidth) # str te da la estructura del objeto llamado Datos
 ```
@@ -32,9 +32,9 @@ str(Dat_ringwidth) # str te da la estructura del objeto llamado Datos
 
 
 ```{r}
-# ## Graficar los datos  Control de calidad otra prueba que los dos archivos son iguales -------------------------------
+# ## Graficar los Datos  Control de calidad otra prueba que los dos archivos son iguales -------------------------------
 
-plot.ts(Dat__ringwidth[,20])
+plot.ts(Dat_ringwidth[,20])
 plot.ts((Dat_ringwidth[,2]), col="darkred")
 plot.ts((Dat_ringwidth[,3]), col="darkred")
 plot.ts((Dat_ringwidth[,6]), col="darkred")
@@ -62,4 +62,165 @@ spag.plot(Dat_latewood, zfac = 0.3)
 ```
 
 
+Corrborar correlaciones entre series 
+```{r}
+#simple correlacion entre series y series con su periodo en comun
+cor(Dat_ringwidth, use = "pairwise")
+diag(cor(Dat_ringwidth, use = "pairwise"))
+
+```
+
+dplR puede generar Resultados muy similares a los de COFECHA
+
+```{r}
+COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 10, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
+```
+```{r}
+COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 20, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
+```
+```{r}
+COFECHA_p_0.05 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 30, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.05)
+
+```
+```{r}
+COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ftp, seg.length = 30, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
+
+```
+```{r}
+
+COFECHA_p_0.1
+
+```
+buscamos los segmentos que no correlacionan bien con el resto de series
+
+```{r}
+COFECHA_p_0.1$flags
+#se puede especificar la muestra que te interesa corregir
+COFECHA_p_0.1$flags["RAN10A"] 
+COFECHA_p_0.1$flags["RAN05A"] 
+
+#graficar la muestra problematica con otras muestras que se ven bien
+
+# En dplR los nombres de las columnas son las muestras y el nombre de las filas son los años
+# aca podemos extraer el año de inicio (el año mas aniguo del archivo  que tenemos)
+```
+
+```{r}
+
+
+Año_inicio <- as.numeric(rownames(Dat_ringwidth))[1]
+time_series_convert <- ts(Dat_ringwidth[,c("RAN08B","RAN10A")],start = Año_inicio, frequency =1 )
+plot(time_series_convert)
+
+#Seleccion de un solo segmento de las series
+
+segmento_Problemas <- window(time_series_convert, start=1915, end=1944) 
+segmento_SIN_Problemas <- window(time_series_convert,1970,1990) 
+
+# visualisamos el segmento con problemas con respecto a una seria sin problemas
+plot(segmento_Problemas[,"RAN08B"])
+lines(segmento_Problemas[,"RAN10A"], lwd=2)
+
+# Tambine se puede identificar la columna por su numero
+plot(segmento_SIN_Problemas[,1]) #"RAN08B"
+lines(segmento_SIN_Problemas[,2], lwd=2) #"RAN10A"
+
+# Ajustamos los  limites del Eje "Y"
+plot(segmento_SIN_Problemas[,1], ylim= range(segmento_SIN_Problemas))
+lines(segmento_SIN_Problemas[,2], lwd=2)
+
+```
+
+
+
+
+
+### Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
+
+Primero pordemos fabricar una serie de tiempo que  se apeque a la teoria de el modelo linear agregado "Linear aggregated model" en dodne  se suman distintas fuentes de variabilidad como el error estocastico random Disturbios endogenos y exogenos Variabilidad climatica tendencias relacionadas con la edad
+
+
+```{r}
+
+Err <- rnorm(200, mean = 0.5,sd = 0.1 )
+dist <- c(rep(x = 0, 100), seq(from = 0.8,to = 0.001, length.out = 30),rep(0,70)) #disturbio agregado en el año 101 con efectos de 30 años
+clim <- rnorm(200,mean= 1, sd = 0.3)
+age <- 1*(1/1.04)^c(1:200) # exp neg
+
+Agg <- Err+dist+clim+age
+
+```
+# el layout es util para hacer plots en la misma ventana  esta basado en una matriz  en donde los numeros correlativos 1...x  es el orden y posicion en que jhacemos el plot
+```{r}
+
+layout(matrix(1:2, nrow = 2, ncol = 1),widths = 3, heights = c(2,2), respect = T )
+par(mar=c(1,4,3,1))
+plot.ts(Err,  ylim=c(0,2))
+lines(dist)
+lines(clim)
+lines(age)
+plot.ts(Agg, main="variabilidad agregada Error+clima+edad+disturbio")
+
+
+```
+#Otro ejmplo de uso del layout es:
+
+```{r}
+
+layout(matrix(c(1,0,
+                2,5,
+                3,5,
+                4,0), nrow = 4, ncol = 2, byrow = T),widths = c(2,3), heights = c(1,1), respect = T )
+
+layout.show(5) # esto solo  enseña cual es la configuracion de los 5 plots.
+
+par(mar=c(1,4,1,1))
+plot.ts(Err,  ylim=c(0.4,0.6))
+plot.ts(dist)
+plot.ts(clim, col="darkblue")
+plot.ts(age,col="darkgreen", lwd=3)
+par(mar=c(2,4,3,2))
+plot.ts(Agg, main="variabilidad agregada
+Error+clima+edad+disturbio")
+
+```
+
+## ahora vemos  el effecto de la extraccion de la señal climatica y la edad
+```{r}
+
+
+cor(Agg,clim) # señal  de Agg versus el clima
+
+detrend.series(Agg, method = "ModNegExp")
+detrend.series(Agg, method = "Spline", nyrs = 40)
+
+
+det_exp <- detrend.series(Agg, method = "ModNegExp")
+det_sp <- detrend.series(Agg, method = "Spline", nyrs = 50)
+
+
+layout(matrix(1:2, nrow = 2, ncol = 1),widths = 3, heights = c(2,2), respect = T )
+par(mar=c(2,4,3,2))
+
+plot.ts(det_exp)
+lines(det_sp, col="red")
+abline(h=1)
+
+plot(det_exp,clim)
+points(det_sp,clim, col="red", pch=19)
+text(x = 0.6, y = 1.5,labels = round(cor(det_exp,clim),2))
+text(x = 0.6, y = 1,labels = round(cor(det_sp,clim),2), col= "red")
+
+cor(det_sp,Err)
+# Conclucion es que el spline de 50 años  logra minimizar el efecto de la edad y de ese evento de disturbio.
+
+require(graphics)
+
+m <- decompose(co2)
+m$figure
+plot(m)
+
+
+
+```
 
