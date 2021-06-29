@@ -1,14 +1,16 @@
 ---
-title: "R Notebook"
+title: "Introduccion a la Dendrocronologia en R"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
-
 ```{r}
-plot(cars)
+#install.packages(dplR)
+library(dplR) # libreria para analisis dendrocronologicos
+Dat_web <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+Dat_web[,11]==Dat_ftp[,11]
+str(Dat_ftp) # str te da la estructura del objeto llamado Datos
+str(Dat_web) # str te da la estructura del objeto llamado Datos
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
