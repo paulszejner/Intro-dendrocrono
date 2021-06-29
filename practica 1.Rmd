@@ -13,17 +13,53 @@ en cada seccion  podras  ejecutar y analizar   los comandos  basicos para  leer,
 La idea de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y  puedas aprender haciendo....
 
 
-`rm(list=ls())` esto borrara  todos los objetos que tengan activos en R es bueno comenzar en blanco para evitar problemas cuando nombramos algun objeto
-
 A continuacion vamos a instalr y activar el dplR y se conectaran a la base de datos del ITRDB mediante la web
 
 ```{r}
 #install.packages(dplR)
 library(dplR) # libreria para analisis dendrocronologicos
-Dat_web <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
-Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
-Dat_web[,11]==Dat_ftp[,11]
-str(Dat_ftp) # str te da la estructura del objeto llamado Datos
-str(Dat_web) # str te da la estructura del objeto llamado Datos
+
+Dat_ringwidth <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+Dat_Earlywood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042e.rwl")
+Dat_latewood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042l.rwl")
+
+#Tambien se puede bajar  desde los FPTs del NOAA
+#Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+
+str(Dat_ringwidth) # str te da la estructura del objeto llamado Datos
 ```
+
+
+
+```{r}
+# ## Graficar los datos  Control de calidad otra prueba que los dos archivos son iguales -------------------------------
+
+plot.ts(Dat__ringwidth[,20])
+plot.ts((Dat_ringwidth[,2]), col="darkred")
+plot.ts((Dat_ringwidth[,3]), col="darkred")
+plot.ts((Dat_ringwidth[,6]), col="darkred")
+
+```
+
+
+```{r}
+# cuantas series de tiempo estan en este archivo?
+n_series <- ncol(Dat_ringwidth)
+# ahora hacemos un plot con todas las serias  en su estado crudo o RAW  sin ningun tratamiento alguno
+plot.ts(Dat_ringwidth[,20])
+for(s in 1:n_series){lines(Dat_ringwidth[,s])  }
+```
+
+en dplR  hay otras opciones  para haccer esto  y de mejor  manera!  por ejemplo   con mas orden y con algunas caracteristicas  que pueden ser utiles
+
+```{r}
+spag.plot(Dat_ringwidth, zfac = 1)
+spag.plot(Dat_ringwidth, zfac = 3)
+spag.plot(Dat_ringwidth, zfac = 0.3)
+spag.plot(Dat_Earlywood, zfac = 0.3)
+spag.plot(Dat_latewood, zfac = 0.3)
+
+```
+
+
 
