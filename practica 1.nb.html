@@ -1759,43 +1759,33 @@ summary {
 
 
 <!-- rnb-text-begin -->
+<div id="clase-intro-a-la-dendrocronologia" class="section level4">
+<h4>Clase intro a la Dendrocronologia</h4>
+<div id="instrucciones" class="section level6">
+<h6>Instrucciones</h6>
+<p>bla bla bla bla</p>
+<p>en cada seccion podras ejecutar y analizar los comandos basicos para leer, visualisar y realizar los analisis baicos utilizados en Dendrocronologia. la mayoria de analisis que se llevaran acabo son iguales o muy similares a los que COFECHA y ARSTAN pueden ejecutar. En este caso utilizaremos el ambiente de R y utilizaremso el paquete dplR programado y desarrollado por Andy Bunn y Mikko Korpela 2014 (<a href="https://drive.google.com/uc?export=download&amp;id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa" class="uri">https://drive.google.com/uc?export=download&amp;id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa</a>)</p>
+<p>La idea de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y puedas aprender haciendo….</p>
+<p><code>rm(list=ls())</code> esto borrara todos los objetos que tengan activos en R es bueno comenzar en blanco para evitar problemas cuando nombramos algun objeto</p>
+<p>A continuacion vamos a instalr y activar el dplR y se conectaran a la base de datos del ITRDB mediante la web</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKERhdF93ZWIpICMgc3RyIHRlIGRhIGxhIGVzdHJ1Y3R1cmEgZGVsIG9iamV0byBsbGFtYWRvIERhdG9zXG5cbmBgYCJ9 -->
-<pre class="r"><code>str(Dat_web) # str te da la estructura del objeto llamado Datos
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGwucGFja2FnZXMoZHBsUilcbmxpYnJhcnkoZHBsUikgIyBsaWJyZXJpYSBwYXJhIGFuYWxpc2lzIGRlbmRyb2Nyb25vbG9naWNvc1xuRGF0X3dlYiA8LSByZWFkLnJ3bChcImh0dHBzOi8vd3d3Lm5jZWkubm9hYS5nb3YvcHViL2RhdGEvcGFsZW8vdHJlZXJpbmcvbWVhc3VyZW1lbnRzL25vcnRoYW1lcmljYS9tZXhpY28vbWV4aTA0Mi5yd2xcIilcbkRhdF9mdHAgPC0gcmVhZC5yd2woXCJmdHA6Ly9mdHAubmNkYy5ub2FhLmdvdi9wdWIvZGF0YS9wYWxlby90cmVlcmluZy9tZWFzdXJlbWVudHMvbm9ydGhhbWVyaWNhL21leGljby9tZXhpMDQyLnJ3bFwiKVxuRGF0X3dlYlssMTFdPT1EYXRfZnRwWywxMV1cbnN0cihEYXRfZnRwKSAjIHN0ciB0ZSBkYSBsYSBlc3RydWN0dXJhIGRlbCBvYmpldG8gbGxhbWFkbyBEYXRvc1xuc3RyKERhdF93ZWIpICMgc3RyIHRlIGRhIGxhIGVzdHJ1Y3R1cmEgZGVsIG9iamV0byBsbGFtYWRvIERhdG9zXG5gYGAifQ== -->
+<pre class="r"><code>#install.packages(dplR)
+library(dplR) # libreria para analisis dendrocronologicos
+Dat_web &lt;- read.rwl(&quot;https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl&quot;)
+Dat_ftp &lt;- read.rwl(&quot;ftp://ftp.ncdc.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl&quot;)
+Dat_web[,11]==Dat_ftp[,11]
+str(Dat_ftp) # str te da la estructura del objeto llamado Datos
+str(Dat_web) # str te da la estructura del objeto llamado Datos</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ2xhc3NlcyDigJhyd2zigJkgYW5kICdkYXRhLmZyYW1lJzpcdDE0MiBvYnMuIG9mICAyMCB2YXJpYWJsZXM6XG4gJCBSQU4wMUE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wMUI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wMkE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wMkI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wM0E6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wM0I6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wNEE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wNUE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wNUI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wNkE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wN0E6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wN0I6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wOEE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wOEI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wOUE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4wOUI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4xMEE6IG51bSAgMS4wOCAxLjQ3IDEuNyAxLjA4IDEuNDggLi4uXG4gJCBSQU4xMUI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4xMkE6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBSQU4xMkI6IG51bSAgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgTkEgLi4uXG4ifQ== -->
-<pre><code>Classes ‘rwl’ and 'data.frame': 142 obs. of  20 variables:
- $ RAN01A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN01B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN02A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN02B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN03A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN03B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN04A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN05A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN05B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN06A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN07A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN07B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN08A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN08B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN09A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN09B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN10A: num  1.08 1.47 1.7 1.08 1.48 ...
- $ RAN11B: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN12A: num  NA NA NA NA NA NA NA NA NA NA ...
- $ RAN12B: num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Cmd+Option+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Cmd+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
 <!-- rnb-text-end -->
+</div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW50cm9kdWNjaW9uIGEgbGEgRGVuZHJvY3Jvbm9sb2dpYSBlbiBSIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgpgYGB7cn0KI2luc3RhbGwucGFja2FnZXMoZHBsUikKbGlicmFyeShkcGxSKSAjIGxpYnJlcmlhIHBhcmEgYW5hbGlzaXMgZGVuZHJvY3Jvbm9sb2dpY29zCkRhdF93ZWIgPC0gcmVhZC5yd2woImh0dHBzOi8vd3d3Lm5jZWkubm9hYS5nb3YvcHViL2RhdGEvcGFsZW8vdHJlZXJpbmcvbWVhc3VyZW1lbnRzL25vcnRoYW1lcmljYS9tZXhpY28vbWV4aTA0Mi5yd2wiKQpEYXRfZnRwIDwtIHJlYWQucndsKCJmdHA6Ly9mdHAubmNkYy5ub2FhLmdvdi9wdWIvZGF0YS9wYWxlby90cmVlcmluZy9tZWFzdXJlbWVudHMvbm9ydGhhbWVyaWNhL21leGljby9tZXhpMDQyLnJ3bCIpCkRhdF93ZWJbLDExXT09RGF0X2Z0cFssMTFdCnN0cihEYXRfZnRwKSAjIHN0ciB0ZSBkYSBsYSBlc3RydWN0dXJhIGRlbCBvYmpldG8gbGxhbWFkbyBEYXRvcwpzdHIoRGF0X3dlYikgIyBzdHIgdGUgZGEgbGEgZXN0cnVjdHVyYSBkZWwgb2JqZXRvIGxsYW1hZG8gRGF0b3MKYGBgCgpBZGQgYSBuZXcgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpJbnNlcnQgQ2h1bmsqIGJ1dHRvbiBvbiB0aGUgdG9vbGJhciBvciBieSBwcmVzc2luZyAqQ21kK09wdGlvbitJKi4KCldoZW4geW91IHNhdmUgdGhlIG5vdGVib29rLCBhbiBIVE1MIGZpbGUgY29udGFpbmluZyB0aGUgY29kZSBhbmQgb3V0cHV0IHdpbGwgYmUgc2F2ZWQgYWxvbmdzaWRlIGl0IChjbGljayB0aGUgKlByZXZpZXcqIGJ1dHRvbiBvciBwcmVzcyAqQ21kK1NoaWZ0K0sqIHRvIHByZXZpZXcgdGhlIEhUTUwgZmlsZSkuIAoKVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLgoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSW50cm9kdWNjaW9uIGEgbGEgRGVuZHJvY3Jvbm9sb2dpYSBlbiBSIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCiMjIyMgQ2xhc2UgaW50cm8gYSBsYSBEZW5kcm9jcm9ub2xvZ2lhCgojIyMjIyMgSW5zdHJ1Y2Npb25lcwpibGEgYmxhIApibGEgYmxhCgplbiBjYWRhIHNlY2Npb24gIHBvZHJhcyAgZWplY3V0YXIgeSBhbmFsaXphciAgIGxvcyBjb21hbmRvcyAgYmFzaWNvcyBwYXJhICBsZWVyLCB2aXN1YWxpc2FyIHkgcmVhbGl6YXIgIGxvcyBhbmFsaXNpcyBiYWljb3MgdXRpbGl6YWRvcyBlbiBEZW5kcm9jcm9ub2xvZ2lhLiAgbGEgbWF5b3JpYSBkZSBhbmFsaXNpcyBxdWUgc2UgbGxldmFyYW4gYWNhYm8gc29uIGlndWFsZXMgbyBtdXkgc2ltaWxhcmVzIGEgbG9zIHF1ZSBDT0ZFQ0hBIHkgQVJTVEFOICBwdWVkZW4gZWplY3V0YXIuIEVuIGVzdGUgY2FzbyB1dGlsaXphcmVtb3MgZWwgIGFtYmllbnRlIGRlIFIgeSB1dGlsaXphcmVtc28gIGVsIHBhcXVldGUgZHBsUiAgcHJvZ3JhbWFkbyB5IGRlc2Fycm9sbGFkbyBwb3IgQW5keSBCdW5uIHkgTWlra28gS29ycGVsYSAyMDE0IChodHRwczovL2RyaXZlLmdvb2dsZS5jb20vdWM/ZXhwb3J0PWRvd25sb2FkJmlkPTFwczd0WjBSVHd1SXIyUF9oLXVnSGtiZ0FzM0pyZHhhYSkKCkxhIGlkZWEgZGUgZXN0b3MgZWplcmNpY2lvcyBlcyBxdWUgcHVlZGFzIGZhbWlsaWFyaXphcnRlIGNvbiBlc3RlIHRpcG8gZGUgYW1iaWVudGUsIHkgIHB1ZWRhcyBhcHJlbmRlciBoYWNpZW5kby4uLi4KCgpgcm0obGlzdD1scygpKWAgZXN0byBib3JyYXJhICB0b2RvcyBsb3Mgb2JqZXRvcyBxdWUgdGVuZ2FuIGFjdGl2b3MgZW4gUiBlcyBidWVubyBjb21lbnphciBlbiBibGFuY28gcGFyYSBldml0YXIgcHJvYmxlbWFzIGN1YW5kbyBub21icmFtb3MgYWxndW4gb2JqZXRvCgpBIGNvbnRpbnVhY2lvbiB2YW1vcyBhIGluc3RhbHIgeSBhY3RpdmFyIGVsIGRwbFIgeSBzZSBjb25lY3RhcmFuIGEgbGEgYmFzZSBkZSBkYXRvcyBkZWwgSVRSREIgbWVkaWFudGUgbGEgd2ViCgpgYGB7cn0KI2luc3RhbGwucGFja2FnZXMoZHBsUikKbGlicmFyeShkcGxSKSAjIGxpYnJlcmlhIHBhcmEgYW5hbGlzaXMgZGVuZHJvY3Jvbm9sb2dpY29zCkRhdF93ZWIgPC0gcmVhZC5yd2woImh0dHBzOi8vd3d3Lm5jZWkubm9hYS5nb3YvcHViL2RhdGEvcGFsZW8vdHJlZXJpbmcvbWVhc3VyZW1lbnRzL25vcnRoYW1lcmljYS9tZXhpY28vbWV4aTA0Mi5yd2wiKQpEYXRfZnRwIDwtIHJlYWQucndsKCJmdHA6Ly9mdHAubmNkYy5ub2FhLmdvdi9wdWIvZGF0YS9wYWxlby90cmVlcmluZy9tZWFzdXJlbWVudHMvbm9ydGhhbWVyaWNhL21leGljby9tZXhpMDQyLnJ3bCIpCkRhdF93ZWJbLDExXT09RGF0X2Z0cFssMTFdCnN0cihEYXRfZnRwKSAjIHN0ciB0ZSBkYSBsYSBlc3RydWN0dXJhIGRlbCBvYmpldG8gbGxhbWFkbyBEYXRvcwpzdHIoRGF0X3dlYikgIyBzdHIgdGUgZGEgbGEgZXN0cnVjdHVyYSBkZWwgb2JqZXRvIGxsYW1hZG8gRGF0b3MKYGBgCgo=</div>
 
 
 

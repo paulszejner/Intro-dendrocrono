@@ -2,6 +2,20 @@
 title: "Introduccion a la Dendrocronologia en R"
 output: html_notebook
 ---
+#### Clase intro a la Dendrocronologia
+
+###### Instrucciones
+bla bla 
+bla bla
+
+en cada seccion  podras  ejecutar y analizar   los comandos  basicos para  leer, visualisar y realizar  los analisis baicos utilizados en Dendrocronologia.  la mayoria de analisis que se llevaran acabo son iguales o muy similares a los que COFECHA y ARSTAN  pueden ejecutar. En este caso utilizaremos el  ambiente de R y utilizaremso  el paquete dplR  programado y desarrollado por Andy Bunn y Mikko Korpela 2014 (https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa)
+
+La idea de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y  puedas aprender haciendo....
+
+
+`rm(list=ls())` esto borrara  todos los objetos que tengan activos en R es bueno comenzar en blanco para evitar problemas cuando nombramos algun objeto
+
+A continuacion vamos a instalr y activar el dplR y se conectaran a la base de datos del ITRDB mediante la web
 
 ```{r}
 #install.packages(dplR)
@@ -12,10 +26,4 @@ Dat_web[,11]==Dat_ftp[,11]
 str(Dat_ftp) # str te da la estructura del objeto llamado Datos
 str(Dat_web) # str te da la estructura del objeto llamado Datos
 ```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
 
