@@ -1,6 +1,6 @@
 
-
-library(measuRing) Version 3.4 R
+install.packages("measuRing")
+library(measuRing) 
 image1 <- system.file("ALT04A.tif", package = "measuRing")
 image1
 detect1 <- ringDetect(image1, segs = 3)
