@@ -4,16 +4,18 @@ output: html_notebook
 ---
 #### Clase intro a la Dendrocronologia
 
-###### Instrucciones
-bla bla 
-bla bla
+##### Instrucciones
 
-en cada seccion  podras  ejecutar y analizar   los comandos  basicos para  leer, visualisar y realizar  los analisis baicos utilizados en Dendrocronologia.  la mayoria de analisis que se llevaran acabo son iguales o muy similares a los que COFECHA y ARSTAN  pueden ejecutar. En este caso utilizaremos el  ambiente de R y utilizaremso  el paquete dplR  programado y desarrollado por Andy Bunn y Mikko Korpela 2014 (https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa)
+En cada sección podrás ejecutar y analizar los comandos básicos para leer, visualizar y realizar los análisis básicos utilizados en Dendrocronología. La mayoría de análisis que se llevaran acabo son iguales o muy similares a los que se realizan en los programas originales programados en Fortran llamados COFECHA y ARSTAN. En este caso utilizaremos el ambiente de R y utilizaremos el paquete `dplR` programado y desarrollado por Andy Bunn y Mikko Korpela  en el 2014 pueden bajar el articulo  dándole clik al siguiente enlace. https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa
 
-La idea de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y  puedas aprender haciendo....
+La idea y objetivo principal de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y puedas aprender haciendo. A lo largo de este documento hay un set de  comandos y ejercicios que podrás ejecutar y modificar con tus propios archivos y o mediciones. Si lo modificaste y necesitas el archivo original lo puedes clonar de nuevo desde la pagina de github. 
+https://github.com/paulszejner/Intro_dendrocrono.git
 
+A continuación vamos a instalar y activar el `dplR` y se conectaran a la base de datos disponibles del international Tree Ring Data Bank (ITRDB) mediante la web
 
-A continuacion vamos a instalr y activar el dplR y se conectaran a la base de Datos del ITRDB mediante la web
+El primer paso de buenas costumbres y buenas practicas es iniciar con el ambiente de R limpio utilizando el comando `rm(list=ls())` podras limpar todos los objetos que pueden estar activos en tu consola.
+![image](https://user-images.githubusercontent.com/5273434/131227767-1f491f2e-2179-4948-a311-4383f5e2dab4.png)
+
 
 ```{r}
 #install.packages(dplR)
