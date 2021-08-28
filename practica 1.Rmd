@@ -216,11 +216,11 @@ Como podemos observar esta relación  contiene variabilidad ajena al clima.  rec
 
 En los siguientes pasos vamos a  experimentar  algunas técnicas para remover el efecto de la edad, y el efecto del disturbio utilizando  herramientas de estadística y de moldeamiento linear.
 
+las funciones que se pueden utilizar para esta remoción de tendencias son: `detrend.series` funciona para  remover la tendencia a  series en especifico. y `detrend` para remover la tendencia simultáneamente a muchas series.
 
 ```{r}
 detrend.series(Agg, method = "ModNegExp")
 detrend.series(Agg, method = "Spline", nyrs = 40)
-
 
 det_exp <- detrend.series(Agg, method = "ModNegExp")
 det_sp <- detrend.series(Agg, method = "Spline", nyrs = 50)
