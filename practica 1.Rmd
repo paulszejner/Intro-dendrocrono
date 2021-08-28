@@ -220,15 +220,17 @@ Las funciones que se pueden utilizar para esta remoción de tendencias son: `det
 
 ```{r}
 detrend.series(Agregado, method = "ModNegExp") # en este caso  utilizamos  la función  con el argumento del método el cual  se utiliza para el ajuste linear. y se selecciona  el Modo exponencial negativo para que el programa  ajuste una función exponencial negativa  a la serie del agregado y se puedan estimar los residuales de este ajuste, para luego estandarizar con una media de uno.
+```
 
-detrend.series(Agregado, method = "Spline", nyrs = 40) # en ese caso se ajusta una curva mas flexible  llamada Qubic spline  con 40 años de flexibilidad.
+```{r}
+detrend.series(Agregado, method = "Spline", nyrs = 20) # en ese caso se ajusta una curva mas flexible  llamada Qubic spline  con 40 años de flexibilidad.
 
 ```
 
 ```{r}
 # Acá repetimos lo mismo  pero le asignamos un nombre a cada  objeto nuevo
 det_exp <- detrend.series(Agregado, method = "ModNegExp")
-det_sp <- detrend.series(Agregado, method = "Spline", nyrs = 40)
+det_sp <- detrend.series(Agregado, method = "Spline", nyrs = 20)
 
 layout(matrix(1:2, nrow = 2, ncol = 1),widths = 3, heights = c(2,2), respect = T )
 par(mar=c(2,4,3,2))
