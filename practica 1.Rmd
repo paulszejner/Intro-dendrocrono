@@ -1,10 +1,9 @@
 ---
-title: "Introduccion a la Dendrocronologia en R"
+title: "Introducción a la Dendrocronología en R"
 output: html_notebook
 editor_options: 
   chunk_output_type: inline
 ---
-#### Clase intro a la Dendrocronologia
 
 ##### Instrucciones
 
@@ -205,12 +204,20 @@ Error+clima+edad+disturbio")
 
 ```
 
-## ahora vemos  el effecto de la extraccion de la señal climatica y la edad
+### ahora vemos el effecto de la extraccion de la señal climatica y la edad utilizando el detrending o remocion de tendencias
+
+Primero  revisamos  la correlación que excite  en nuestra seria  `agregada` versusla variabilidad del `clima` 
 ```{r}
+plot(Agregado,clima) # señal del "agregado" versus el clima
+cor(Agregado,clima) # señal del "agregado" versus el clima
+
+```
+Como podemos observar esta relación  contiene variabilidad ajena al clima.  recordemos que  el agregado contiene  error random, un disturbio, y el efecto de la edad, por lo que la correlación no es  perfecta. 
+
+En los siguientes pasos vamos a  experimentar  algunas técnicas para remover el efecto de la edad, y el efecto del disturbio utilizando  herramientas de estadística y de moldeamiento linear.
 
 
-cor(Agg,clim) # señal  de Agg versus el clima
-
+```{r}
 detrend.series(Agg, method = "ModNegExp")
 detrend.series(Agg, method = "Spline", nyrs = 40)
 
