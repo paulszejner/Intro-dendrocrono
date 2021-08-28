@@ -5,36 +5,34 @@ output: html_notebook
 #### Clase intro a la Dendrocronologia
 
 ##### Instrucciones
-veamos! 
-En cada sección podrás ejecutar y analizar los comandos básicos para leer, visualizar y realizar los análisis básicos utilizados en Dendrocronología. La mayoría de análisis que se llevaran acabo son iguales o muy similares a los que se realizan en los programas originales programados en Fortran llamados COFECHA y ARSTAN. En este caso utilizaremos el ambiente de R y utilizaremos el paquete `dplR` programado y desarrollado por Andy Bunn y Mikko Korpela  en el 2014 pueden bajar el articulo  dándole clik al siguiente enlace. https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa
+
+En cada sección podrás ejecutar y analizar los comandos básicos para leer, visualizar y realizar los análisis básicos utilizados en Dendrocronología. La mayoría de análisis que se llevaran acabo son iguales o muy similares a los que se realizan en los programas originales programados en FORTRAN llamados COFECHA y ARSTAN. En este caso utilizaremos el ambiente de R y utilizaremos el paquete `dplR` programado y desarrollado por Andy Bunn y Mikko Korpela  en el 2014 pueden bajar el articulo  dándole clic al siguiente enlace. https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa
 
 La idea y objetivo principal de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y puedas aprender haciendo. A lo largo de este documento hay un set de  comandos y ejercicios que podrás ejecutar y modificar con tus propios archivos y o mediciones. Si lo modificaste y necesitas el archivo original lo puedes clonar de nuevo desde la pagina de github. 
 https://github.com/paulszejner/Intro_dendrocrono.git
 
 A continuación vamos a instalar y activar el `dplR` y se conectaran a la base de datos disponibles del international Tree Ring Data Bank (ITRDB) mediante la web
 
-El primer paso de buenas costumbres y buenas practicas es iniciar con el ambiente de R limpio utilizando el comando `rm(list=ls())` podras limpar todos los objetos que pueden estar activos en tu consola.
-![image](https://user-images.githubusercontent.com/5273434/131227767-1f491f2e-2179-4948-a311-4383f5e2dab4.png)
+El primer paso de buenas costumbres y buenas practicas es iniciar con el ambiente de R limpio utilizando el comando `rm(list=ls())` podrás limpiar todos los objetos que pueden estar activos en tu consola.
 
 
 ```{r}
-#install.packages(dplR)
-library(dplR) # libreria para analisis dendrocronologicos
+install.packages(dplR) 
+library(dplR) # librería para análisis dendrocronológicos
 
 Dat_ringwidth <-  read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
 Dat_Earlywood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042e.rwl")
 Dat_latewood <- read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042l.rwl")
 
-#Tambien se puede bajar  desde los FPTs del NOAA
-#Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/Data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
+# También se puede bajar  desde los FPTs del NOAA
+# Dat_ftp <- read.rwl("ftp://ftp.ncdc.noaa.gov/pub/Data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
 
-str(Dat_ringwidth) # str te da la estructura del objeto llamado Datos
+str(Dat_ringwidth) # la función str te da la estructura del objeto llamado Datos
 ```
 
 
-
 ```{r}
-# ## Graficar los Datos  Control de calidad otra prueba que los dos archivos son iguales -------------------------------
+### Grafica los datos para el control de calidad -------------------------------
 
 plot.ts(Dat_ringwidth[,20])
 plot.ts((Dat_ringwidth[,2]), col="darkred")
@@ -43,16 +41,18 @@ plot.ts((Dat_ringwidth[,6]), col="darkred")
 
 ```
 
+#### cuantas series de tiempo están en este archivo?
+Podemos revisar todos los detalles del archivo con el cual vamos a trabajar
 
 ```{r}
-# cuantas series de tiempo estan en este archivo?
+# cuantas series de tiempo están en este archivo? preguntando cuantas columnas  tenemos  es una forma de responder la pregunta
 n_series <- ncol(Dat_ringwidth)
-# ahora hacemos un plot con todas las serias  en su estado crudo o RAW  sin ningun tratamiento alguno
+# ahora hacemos un plot con todas las serias  en su estado crudo o RAW  sin ningún tratamiento alguno
 plot.ts(Dat_ringwidth[,20])
-for(s in 1:n_series){lines(Dat_ringwidth[,s])  }
+for(s in 1:n_series){lines(Dat_ringwidth[,s]) } # esta forma de  plotear todas las series es un for loop  usando cada columna  en cada uno de los loops
 ```
 
-en dplR  hay otras opciones  para haccer esto  y de mejor  manera!  por ejemplo   con mas orden y con algunas caracteristicas  que pueden ser utiles
+En dplR hay otras opciones para graficar los datos que tenemos. Por ejemplo con mas orden y con algunas características que pueden ser útiles. La funcion que se utiliza es el famoso spaguetti plot `spag.plot`  funcion del `dplR`
 
 ```{r}
 spag.plot(Dat_ringwidth, zfac = 1)
@@ -63,16 +63,26 @@ spag.plot(Dat_latewood, zfac = 0.3)
 
 ```
 
+#### Como corroboramos el cofechado?
 
-Corrborar correlaciones entre series 
+Luego de fechar  visualmente las muestras de madera,  se procede a su medición, Durante la medición se pueden cometer algunos errores, lo cual puede perjudicar la señal común de los árboles. Por lo tanto debemos corroborar las correlaciones entre todas las series antes de proceder a cualquier análisis. 
+
 ```{r}
-#simple correlacion entre series y series con su periodo en comun
-cor(Dat_ringwidth, use = "pairwise")
-diag(cor(Dat_ringwidth, use = "pairwise"))
+#simple correlación entre series y series con su periodo en común
+cor(Dat_ringwidth, use = "pairwise") # la función cor  va  a utilizar una matriz o un data frame  para calcular  las correlaciones entre todas las columnas presentes en la base de datos. generando una matriz cuadrada  con le numero de columnas y  filas  igual al número de series.
+
+diag(cor(Dat_ringwidth, use = "pairwise"))  #La función ¨diag¨ solamente extrae un el vector  diagonal  de  una matriz cuadrada,  y en este caso estamos sacando la correlación entre la misma serie. y por eso  deberíamos  obtener  el valor de 1 en toda la diagonal ya que estamos comparando lo mismo con lo mismo. 
 
 ```
 
-dplR puede generar Resultados muy similares a los de COFECHA
+Hay funciones en el `dplR` que pueden generar resultados muy similares a los de COFECHA, el cual es un programa que evalúa la sincronicidad de todas las series  entre si.  para  hacer esta evaluación  se dividen las series en segmentos correlativos y traslapados,  para evaluar las correlaciones de todas las muestras  por segmentos y sin tendencias que pueden  sesgar los coeficientes de correlación. 
+
+A continuación se  generaran  unos ejemplos usando la función del `dplR`  llamada `corr.rwl.seg`  siempre es bueno  poder utilizar los ejemplos  que el mismo paquete  provee.  los cuales pueden  acceder utilizando el siguiente comando, `?corr.rwl.seg` en  donde pueden leer todo sobre la función, y en la parte inferior de la pagina de ayuda  verán algunos ejemplos  que se pueden ejecutar en la consola. 
+
+En los siguientes ejemplos  podrás ver  que se ejecuta la misma función pero con diferentes argumentos. (los argumentos son los detalles que definirán como se evalúa y ejecuta la función). por ejemplo acá podemos aclarar el largo del segmento  que se utiliza para comparar cada serie con el resto de las series `seg.length=10`, como también podemos indicarle que se remueva toda la autocorrelación que puede existir en las series  `prewhiten = T`, generar un gráfico representando los resultados `make.plot = T` y delimitar el limite de confianza para su evaluación estadística `pcrit = 0.1` 
+
+nota: los colores rojos en las figuras indican  los segmentos que presentan correlaciones por debajo del limite de confianza que se exije.
+
 
 ```{r}
 COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 10, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
@@ -85,9 +95,14 @@ COFECHA_p_0.05 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 30, prewhiten =
 
 ```
 ```{r}
-COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ftp, seg.length = 30, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
+COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 30, prewhiten = T, biweight = T, make.plot = T, pcrit = 0.1)
 
 ```
+
+De todas las opciones  que  se pueden ejecutar, que puedes concluir  de este tipo de análisis? 
+
+
+
 ```{r}
 
 COFECHA_p_0.1
