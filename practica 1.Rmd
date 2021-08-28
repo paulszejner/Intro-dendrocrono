@@ -71,9 +71,10 @@ Luego de fechar  visualmente las muestras de madera,  se procede a su medición,
 
 ```{r}
 #simple correlación entre series y series con su periodo en común
-cor(Dat_ringwidth, use = "pairwise") # la función cor  va  a utilizar una matriz o un data frame  para calcular  las correlaciones entre todas las columnas presentes en la base de datos. generando una matriz cuadrada  con le numero de columnas y  filas  igual al número de series.
+cor_matrix <- round(cor(Dat_ringwidth, use = "pairwise"), digits = 2) # la función cor  va  a utilizar una matriz o un data frame  para calcular  las correlaciones entre todas las columnas presentes en la base de datos. generando una matriz cuadrada  con le numero de columnas y  filas  igual al número de series.
+cor_matrix
 
-diag(cor(Dat_ringwidth, use = "pairwise"))  #La función ¨diag¨ solamente extrae un el vector  diagonal  de  una matriz cuadrada,  y en este caso estamos sacando la correlación entre la misma serie. y por eso  deberíamos  obtener  el valor de 1 en toda la diagonal ya que estamos comparando lo mismo con lo mismo. 
+diag(cor_matrix)  #La función ¨diag¨ solamente extrae un el vector  diagonal  de  una matriz cuadrada,  y en este caso estamos sacando la correlación entre la misma serie. y por eso  deberíamos  obtener  el valor de 1 en toda la diagonal ya que estamos comparando lo mismo con lo mismo. 
 
 ```
 
@@ -151,9 +152,6 @@ lines(segmento_SIN_Problemas[,2], lwd=2)
 ```
 
 
-
-
-
 #### Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
 
 Primero podremos fabricar una serie de tiempo que  se apegue a la teoría de el modelo linear agregado "Linear aggregated model" en donde  se suman distintas fuentes de variabilidad como el error estocástico, random, Disturbios endogenos y exogenos, Variabilidad climática tendencias relacionadas con la edad.
@@ -161,24 +159,27 @@ Primero podremos fabricar una serie de tiempo que  se apegue a la teoría de el 
 
 ```{r}
 
-Err <- rnorm(200, mean = 0.5,sd = 0.1 )
-dist <- c(rep(x = 0, 100), seq(from = 0.8,to = 0.001, length.out = 30),rep(0,70)) #disturbio agregado en el año 101 con efectos de 30 años
-clim <- rnorm(200,mean= 1, sd = 0.3)
-age <- 1*(1/1.04)^c(1:200) # exp neg
+Error <- rnorm(200, mean = 0.5,sd = 0.1 )
+disturbios <- c(rep(x = 0, 100), seq(from = 0.8,to = 0.001, length.out = 30),rep(0,70)) 
+#disturbio agregado en el año 101 con efectos de 30 años
+clima <- rnorm(200,mean= 1, sd = 0.3)
+Edad <- 1*(1/1.04)^c(1:200) # exponencial  negativa
 
-Agg <- Err+dist+clim+age
+  Agregado <- Error+disturbios+clima+Edad
 
 ```
-# el layout es util para hacer plots en la misma ventana  esta basado en una matriz  en donde los numeros correlativos 1...x  es el orden y posicion en que jhacemos el plot
+El layout es útil para hacer plots en la misma ventana  esta basado en una matriz  en donde los números correlativos 1...x  es el orden y posición en que hacemos el plot
 ```{r}
 
 layout(matrix(1:2, nrow = 2, ncol = 1),widths = 3, heights = c(2,2), respect = T )
-par(mar=c(1,4,3,1))
-plot.ts(Err,  ylim=c(0,2))
-lines(dist)
-lines(clim)
-lines(age)
-plot.ts(Agg, main="variabilidad agregada Error+clima+edad+disturbio")
+par(mar=c(2,4,3,2))
+plot.ts(Error,  ylim=c(0,2), ylab="variables")
+lines(disturbios)
+lines(clima)
+lines(Edad)
+
+plot.ts(Agregado, main="variabilidad agregada 
+Error+clima+edad+disturbio")
 
 
 ```
@@ -191,15 +192,15 @@ layout(matrix(c(1,0,
                 3,5,
                 4,0), nrow = 4, ncol = 2, byrow = T),widths = c(2,3), heights = c(1,1), respect = T )
 
-layout.show(5) # esto solo  enseña cual es la configuracion de los 5 plots.
+layout.show(5) # esto solo  enseña cual es la configuración de los 5 plots.
 
 par(mar=c(1,4,1,1))
-plot.ts(Err,  ylim=c(0.4,0.6))
-plot.ts(dist)
-plot.ts(clim, col="darkblue")
-plot.ts(age,col="darkgreen", lwd=3)
+plot.ts(Error,  ylim=c(0,2))
+plot.ts(disturbios, ylim=c(0,2))
+plot.ts(clima, col="darkblue", ylim=c(0,2))
+plot.ts(Edad,col="darkgreen", lwd=3, ylim=c(0,2))
 par(mar=c(2,4,3,2))
-plot.ts(Agg, main="variabilidad agregada
+plot.ts(Agregado, main="variabilidad agregada
 Error+clima+edad+disturbio")
 
 ```
