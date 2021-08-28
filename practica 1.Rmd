@@ -1,6 +1,8 @@
 ---
 title: "Introduccion a la Dendrocronologia en R"
 output: html_notebook
+editor_options: 
+  chunk_output_type: inline
 ---
 #### Clase intro a la Dendrocronologia
 
@@ -99,7 +101,9 @@ COFECHA_p_0.1 <- corr.rwl.seg(rwl = Dat_ringwidth, seg.length = 30, prewhiten = 
 
 ```
 
-De todas las opciones  que  se pueden ejecutar, que puedes concluir  de este tipo de análisis? 
+De todas las opciones  que  se pueden ejecutar, qué puedes concluir de este tipo de análisis?
+-que argumentos son importantes? 
+-de que nos sirve este tipo de análisis?
 
 
 ```{r}
@@ -107,11 +111,11 @@ De todas las opciones  que  se pueden ejecutar, que puedes concluir  de este tip
 COFECHA_p_0.1
 
 ```
-como hemos podido observar hay segmentos que no correlaconan con el conjunto de series, luego podemos buscar los segmentos que no correlacionan  con el resto de series utilizando el objeto resultado de la función `corr.rwl.seg` el cual se llama `COFECHA_p_0.1`y podemos indagar adentro de ese objeto utilizando `COFECHA_p_0.1$flags`.
+como hemos podido observar hay segmentos que no correlacionan con el conjunto de series, luego podemos buscar los segmentos que no correlacionan  con el resto de series utilizando el objeto resultado de la función `corr.rwl.seg` el cual se llama `COFECHA_p_0.1`y podemos indagar adentro de ese objeto utilizando `COFECHA_p_0.1$flags`.
 
 ```{r}
 COFECHA_p_0.1$flags
-#se puede especificar la muestra que te interesa corregir
+#se puede especificar la muestra que te interesa corregir 
 COFECHA_p_0.1$flags["RAN10A"] 
 COFECHA_p_0.1$flags["RAN05A"] 
 
@@ -150,9 +154,9 @@ lines(segmento_SIN_Problemas[,2], lwd=2)
 
 
 
-### Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
+#### Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
 
-Primero pordemos fabricar una serie de tiempo que  se apeque a la teoria de el modelo linear agregado "Linear aggregated model" en dodne  se suman distintas fuentes de variabilidad como el error estocastico random Disturbios endogenos y exogenos Variabilidad climatica tendencias relacionadas con la edad
+Primero podremos fabricar una serie de tiempo que  se apegue a la teoría de el modelo linear agregado "Linear aggregated model" en donde  se suman distintas fuentes de variabilidad como el error estocástico, random, Disturbios endogenos y exogenos, Variabilidad climática tendencias relacionadas con la edad.
 
 
 ```{r}
