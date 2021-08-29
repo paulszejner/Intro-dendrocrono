@@ -117,7 +117,7 @@ De todas las opciones  que  se pueden ejecutar, qué puedes concluir de este tip
 COFECHA_p_0.1
 
 ```
-como hemos podido observar hay segmentos que no correlacionan con el conjunto de series, luego podemos buscar los segmentos que no correlacionan  con el resto de series utilizando el objeto resultado de la función `corr.rwl.seg` el cual se llama `COFECHA_p_0.1`y podemos indagar adentro de ese objeto utilizando `COFECHA_p_0.1$flags`.
+Como hemos podido observar hay segmentos que no correlacionan con el conjunto de series. Por lo tanto podemos buscar los segmentos que no correlacionan con el resto de series utilizando el objeto resultado de la función `corr.rwl.seg` el cual se llama `COFECHA_p_0.1`y podemos indagar adentro de ese objeto utilizando `COFECHA_p_0.1$flags`.
 
 ```{r}
 COFECHA_p_0.1$flags
@@ -125,20 +125,18 @@ COFECHA_p_0.1$flags
 COFECHA_p_0.1$flags["RAN10A"] 
 COFECHA_p_0.1$flags["RAN05A"] 
 
-#graficar la muestra problemática con otras muestras que se ven bien
+# Graficar la muestra problemática con otras muestras que se ven bien
 
 # En dplR los nombres de las columnas son las muestras y el nombre de las filas son los años
-# acá podemos extraer el año de inicio (el año mas antiguo del archivo  que tenemos)
+# Acá podemos extraer el año de inicio (el año mas antiguo del archivo  que tenemos)
 ```
 
 ```{r}
-
 Año_inicio <- as.numeric(rownames(Dat_ringwidth))[1]
 time_series_convert <- ts(Dat_ringwidth[,c("RAN08B","RAN10A")],start = Año_inicio, frequency =1 )
 plot(time_series_convert)
 
-#Selección de un solo segmento de las series
-
+# Selección de un solo segmento de las series
 segmento_Problemas <- window(time_series_convert, start=1915, end=1944) 
 segmento_SIN_Problemas <- window(time_series_convert,1970,1990) 
 
