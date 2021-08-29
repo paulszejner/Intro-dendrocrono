@@ -7,7 +7,9 @@ editor_options:
 
 ##### Instrucciones
 
-En cada sección podrás ejecutar y analizar los comandos básicos para leer, visualizar y realizar los análisis básicos utilizados en Dendrocronología. La mayoría de análisis que se llevaran acabo son iguales o muy similares a los que se realizan en los programas originales programados en FORTRAN llamados COFECHA y ARSTAN. En este caso utilizaremos el ambiente de R y utilizaremos el paquete `dplR` programado y desarrollado por Andy Bunn y Mikko Korpela  en el 2014 pueden bajar el articulo  dándole clic al siguiente enlace. https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa
+En cada sección podrás ejecutar y analizar los comandos básicos para leer, visualizar y realizar los análisis básicos utilizados en Dendrocronología. La mayoría de análisis que se llevaran acabo son iguales o muy similares a los que se realizan en los programas originales programados en FORTRAN llamados COFECHA y ARSTAN (https://www.ldeo.columbia.edu/tree-ring-laboratory/resources/software). 
+
+En este caso utilizaremos el ambiente de R y utilizaremos el paquete `dplR` programado y desarrollado por Andy Bunn y Mikko Korpela  en el 2014 pueden bajar el articulo  dándole clic al siguiente enlace. https://drive.google.com/uc?export=download&id=1ps7tZ0RTwuIr2P_h-ugHkbgAs3Jrdxaa
 
 La idea y objetivo principal de estos ejercicios es que puedas familiarizarte con este tipo de ambiente, y puedas aprender haciendo. A lo largo de este documento hay un set de  comandos y ejercicios que podrás ejecutar y modificar con tus propios archivos y o mediciones. Si lo modificaste y necesitas el archivo original lo puedes clonar de nuevo desde la pagina de github. 
 https://github.com/paulszejner/Intro_dendrocrono.git
@@ -52,6 +54,10 @@ n_series <- ncol(Dat_ringwidth)
 plot.ts(Dat_ringwidth[,20])
 for(s in 1:n_series){lines(Dat_ringwidth[,s]) } # esta forma de  plotear todas las series es un for loop  usando cada columna  en cada uno de los loops
 ```
+## También podemos utilizar un comando especial del `dplR` llamado `rwl.report()`
+```{r}
+rwl.report(Dat_ringwidth)
+```
 
 En dplR hay otras opciones para graficar los datos que tenemos. Por ejemplo con mas orden y con algunas características que pueden ser útiles. La funcion que se utiliza es el famoso spaguetti plot `spag.plot`  funcion del `dplR`
 
@@ -64,7 +70,7 @@ spag.plot(Dat_latewood, zfac = 0.3)
 
 ```
 
-#### Como corroboramos el cofechado?
+### Como corroboramos el cofechado?
 
 Luego de fechar  visualmente las muestras de madera,  se procede a su medición, Durante la medición se pueden cometer algunos errores, lo cual puede perjudicar la señal común de los árboles. Por lo tanto debemos corroborar las correlaciones entre todas las series antes de proceder a cualquier análisis. 
 
@@ -216,7 +222,6 @@ Primero  revisamos  la correlación que excite  en nuestra seria  `agregada` ver
 ```{r}
 plot(Agregado,clima) # señal del "agregado" versus el clima
 cor(Agregado,clima) # señal del "agregado" versus el clima
-
 ```
 Como podemos observar esta relación  contiene variabilidad ajena al clima.  Recordemos que  el `agregado` contiene  `error` random, un `disturbio`, y el efecto de la `edad`, por lo que la correlación no es perfecta y se puede mejorar utilizando algunas tecnicas que a continuación se  realizaran. 
 
