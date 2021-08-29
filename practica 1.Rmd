@@ -136,11 +136,11 @@ plot(time_series_convert)
 segmento_Problemas <- window(time_series_convert, start=1915, end=1944) 
 segmento_SIN_Problemas <- window(time_series_convert,1970,1990) 
 
-# visualisamos el segmento con problemas con respecto a una seria sin problemas
+# visualizamos el segmento con problemas con respecto a una seria sin problemas
 plot(segmento_Problemas[,"RAN08B"])
 lines(segmento_Problemas[,"RAN10A"], lwd=2)
 
-# Tambine se puede identificar la columna por su numero
+# Tambien se puede identificar la columna por su numero
 plot(segmento_SIN_Problemas[,1]) #"RAN08B"
 lines(segmento_SIN_Problemas[,2], lwd=2) #"RAN10A"
 
@@ -151,18 +151,24 @@ lines(segmento_SIN_Problemas[,2], lwd=2)
 ```
 
 
-#### Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
+## Remoción de tendencias (detrending), estandarizacion y extraccion de la señal buscada
+### Ejemplo ficticio
 
-Primero podremos fabricar una serie de tiempo que  se apegue a la teoría de el modelo linear agregado "Linear aggregated model" en donde  se suman distintas fuentes de variabilidad como el error estocástico, random, Disturbios endogenos y exogenos, Variabilidad climática tendencias relacionadas con la edad.
+Primero podremos fabricar una serie de tiempo que  se apegue a la teoría de el modelo linear agregado "Linear aggregated model" en donde  se suman distintas fuentes de variabilidad como el error estocástico, random, Disturbios endógenos y exógenos, Variabilidad climática tendencias relacionadas con la edad. 
+
+### Si quieres una buena presentación de lo que es el modelo agregado de crecimiento de los anillos de los árboles has clic!
+https://drive.google.com/uc?export=download&id=1yk4RO9h6o9Xd-dbryFErCsQ302xW-9mf
 
 
 ```{r}
+# Acá vamos a generar y crear  diferentes vectores de  de 200 años, con diferentes  magnitudes, tendencias  y variabilidad. 
 
+Edad <- 1*(1/1.04)^c(1:200) # formula de una curva exponencial negativa
+clima <- rnorm(200,mean= 1, sd = 0.3) # se generara un vector con variabilidad  aleatoria con media de uno y desviación de 0.3
+disturbios <- c(rep(x = 0, 100), seq(from = 0.8,to = 0.001, length.out = 30),rep(0,70))  #disturbio agregado en el año 101 con efecto de 30 años
 Error <- rnorm(200, mean = 0.3,sd = 0.1 )
-disturbios <- c(rep(x = 0, 100), seq(from = 0.8,to = 0.001, length.out = 30),rep(0,70)) 
-#disturbio agregado en el año 101 con efecto de 30 años
-clima <- rnorm(200,mean= 1, sd = 0.3)
-Edad <- 1*(1/1.04)^c(1:200) # exponencial  negativa
+
+# luego sumamos cada uno de estos factores. 
 
   Agregado <- Error+disturbios+clima+Edad
 
@@ -247,15 +253,48 @@ text(x = 0.6, y = 1,labels = round(cor(det_sp,clima),2), col= "red")
 cor(det_sp,Error)
 
 ```
-### Conclucion, El spline de 50 años logra minimizar el efecto de la edad y de ese evento de disturbio.
+## Conclusión.
 
-#### Otro ejemplo del modelo agregado es  cuando observamos como el CO2 atmosférico  o el dióxido de carbono,  varia mensualmente  a lo largo de los últimos 4 años   
+####  El spline de 25 años logra minimizar el efecto de la edad y de ese único evento de disturbio.
+
+####  Otro ejemplo del modelo agregado es  cuando observamos como el CO2 atmosférico o el dióxido de carbono. el CO2 varia mensualmente  a lo largo de la historia. ver https://gml.noaa.gov/ccgg/trends/
 
 ```{r}
 require(graphics)
 m <- decompose(co2)
-m$figure
 plot(m)
+```
+
+## Desarrollo de la cronología maestra
+
+Luego de  remover las tendencias  ajenas al clima procedemos a  generar la cronología maestra utilizando todas las series   correctamente fechadas.
+para  generar la cronología media de  anchos de anillos podemos utilizar la función llamada `chron`
+Esta función construye una cronología del valor medio de todas las serias previamente estandarizadas. Típicamente a partir de un `data.frame` de anchos de anillo sin tendencia según lo producido por `detrend`.
+
+
+```{r}
+# Recordamos  que tipo de  datos  tenemos  
+rwl.report(Dat_ringwidth)
+
+# Podemos explotar las estadísticas descriptivas  de la base de datos
+rwl.stats(Dat_ringwidth)
+
+# Luego pasamos a remover las tendencias de la edad y de posibles disturbios 
+Dat_ringwidth_index <- detrend(Dat_ringwidth,method = "Spline", nyrs = 50, make.plot = T)
 
 ```
 
+
+#### Después de remover las tendencias y estandarizar las series medidas,  podemos calcular  sus estadísticos para evaluar la señal común a lo largo de la cronologista. 
+```{r}
+
+Statistics <- rwi.stats.running (Dat_ringwidth_index, window.length = 20)
+
+```
+
+```{r}
+
+Dat_ringwidth_cronologia <- chron(Dat_ringwidth_index, biweight = T,prewhiten = T)
+
+plot(Dat_ringwidth_cronologia)
+```
