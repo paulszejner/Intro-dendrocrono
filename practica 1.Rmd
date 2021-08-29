@@ -20,7 +20,8 @@ El primer paso de buenas costumbres y buenas practicas es iniciar con el ambient
 
 
 ```{r}
-install.packages(dplR) 
+# parainstalarlo hay que  borrar el numeral que aparece antes del  "install.packages(dplR)" y ejecutar esa linea
+# install.packages(dplR)
 library(dplR) # librería para análisis dendrocronológicos
 
 Dat_ringwidth <-  read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
