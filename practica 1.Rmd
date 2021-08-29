@@ -1,8 +1,6 @@
 ---
 title: "Introducción a la Dendrocronología en R"
 output: html_notebook
-editor_options: 
-  chunk_output_type: inline
 ---
 
 ##### Instrucciones
@@ -20,8 +18,9 @@ El primer paso de buenas costumbres y buenas practicas es iniciar con el ambient
 
 
 ```{r}
-# parainstalarlo hay que  borrar el numeral que aparece antes del  "install.packages(dplR)" y ejecutar esa linea
+# para instalar el paquete de inertes hay que borrar el numeral que aparece antes del  "install.packages(dplR)" y ejecutar esa linea
 # install.packages(dplR)
+
 library(dplR) # librería para análisis dendrocronológicos
 
 Dat_ringwidth <-  read.rwl("https://www.ncei.noaa.gov/pub/data/paleo/treering/measurements/northamerica/mexico/mexi042.rwl")
